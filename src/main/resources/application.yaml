@@ -1,0 +1,6 @@
+graphql:
+  packages:
+    - "de.sweller.jobboard"
+server:
+  port: 9000
+
