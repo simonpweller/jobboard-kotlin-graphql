@@ -2,8 +2,5 @@ spring:
   jpa:
     generate-ddl: true
 
-graphql:
-  packages:
-    - "de.sweller.jobboard"
 server:
   port: 9000
