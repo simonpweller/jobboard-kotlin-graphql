@@ -8,5 +8,8 @@ class JobsDataFetcher(
     val jobRepository: JobRepository,
 ) {
     @DgsQuery
+    fun job(id: String) = jobRepository.findById(id)
+
+    @DgsQuery
     fun jobs(): Iterable<Job> = jobRepository.findAll()
 }
