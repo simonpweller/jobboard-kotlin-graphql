@@ -1,4 +1,4 @@
-package de.sweller.jobboard
+package de.sweller.jobboard.config
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.CorsRegistry
