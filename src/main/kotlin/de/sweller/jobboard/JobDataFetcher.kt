@@ -4,7 +4,7 @@ import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsQuery
 
 @DgsComponent
-class JobsDataFetcher(
+class JobDataFetcher(
     val jobRepository: JobRepository,
 ) {
     @DgsQuery

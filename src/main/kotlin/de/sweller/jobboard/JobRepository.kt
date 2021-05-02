@@ -9,7 +9,7 @@ import javax.persistence.ManyToOne
 interface JobRepository: CrudRepository<Job, String>
 
 @Entity
-data class Job(
+class Job(
     @Id var id: String,
     var title: String,
     @ManyToOne(fetch = FetchType.LAZY)
