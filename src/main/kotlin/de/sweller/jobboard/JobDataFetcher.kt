@@ -5,6 +5,7 @@ import com.netflix.graphql.dgs.DgsMutation
 import com.netflix.graphql.dgs.DgsQuery
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
+import org.springframework.security.access.annotation.Secured
 import org.springframework.web.server.ResponseStatusException
 
 @DgsComponent
@@ -19,6 +20,7 @@ class JobDataFetcher(
     fun jobs(): Iterable<Job> = jobRepository.findAll()
 
     @DgsMutation
+    @Secured("ROLE_USER")
     fun createJob(input: CreateJobInput): Job {
         val company = companyRepository.findByIdOrNull(input.companyId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
         return jobRepository.save(

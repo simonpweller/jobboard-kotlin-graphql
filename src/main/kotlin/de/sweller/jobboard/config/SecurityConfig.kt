@@ -5,6 +5,7 @@ import de.sweller.jobboard.auth.AuthenticationFilter
 import de.sweller.jobboard.auth.AuthorizationFilter
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
@@ -19,6 +20,7 @@ val KEY = System.getenv()["KEY"]
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true)
 class SecurityConfig(
     val applicationUserDetailsService: ApplicationUserDetailsService,
     val passwordEncoder: PasswordEncoder
@@ -27,9 +29,6 @@ class SecurityConfig(
         http
             .cors().and()
             .csrf().disable()
-//            .authorizeRequests()
-//            .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
-//            .anyRequest().authenticated().and()
             .addFilter(AuthenticationFilter(authenticationManager()))
             .addFilter(AuthorizationFilter(authenticationManager()))
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

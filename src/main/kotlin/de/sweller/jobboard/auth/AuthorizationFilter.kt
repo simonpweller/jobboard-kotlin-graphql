@@ -7,6 +7,7 @@ import de.sweller.jobboard.config.HEADER_PREFIX
 import de.sweller.jobboard.config.KEY
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 import javax.servlet.FilterChain
@@ -28,7 +29,7 @@ class AuthorizationFilter(authManager: AuthenticationManager) : BasicAuthenticat
 
     private fun getAuthentication(token: String): UsernamePasswordAuthenticationToken {
         val jwt = verifier.verify(token)
-        return UsernamePasswordAuthenticationToken(jwt.subject, null, emptyList())
+        return UsernamePasswordAuthenticationToken(jwt.subject, null, listOf(SimpleGrantedAuthority("ROLE_USER")))
     }
 }
 
