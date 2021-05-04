@@ -2,11 +2,13 @@ package de.sweller.jobboard.auth
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.exceptions.JWTVerificationException
 import de.sweller.jobboard.config.HEADER_NAME
 import de.sweller.jobboard.config.HEADER_PREFIX
 import de.sweller.jobboard.config.KEY
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
@@ -22,14 +24,17 @@ class AuthorizationFilter(authManager: AuthenticationManager) : BasicAuthenticat
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain) {
         val token = request.getHeader(HEADER_NAME)?.replace(HEADER_PREFIX, "")
         token?.let {
-            SecurityContextHolder.getContext().authentication = getAuthentication(token)
+            try {
+                val jwt = verifier.verify(token)
+                SecurityContextHolder.getContext().authentication =
+                    UsernamePasswordAuthenticationToken(jwt.subject, null, listOf(SimpleGrantedAuthority("ROLE_USER")))
+            } catch (ex: JWTVerificationException) {
+                SecurityContextHolder.clearContext()
+            } catch (ex: AuthenticationException) {
+                SecurityContextHolder.clearContext()
+            }
         }
         chain.doFilter(request, response)
-    }
-
-    private fun getAuthentication(token: String): UsernamePasswordAuthenticationToken {
-        val jwt = verifier.verify(token)
-        return UsernamePasswordAuthenticationToken(jwt.subject, null, listOf(SimpleGrantedAuthority("ROLE_USER")))
     }
 }
 
